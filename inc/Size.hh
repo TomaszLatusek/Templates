@@ -1,3 +1,3 @@
 #pragma once
 
-constexpr int SIZE = 3;
+constexpr int SIZE = 5;
