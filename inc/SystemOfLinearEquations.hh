@@ -20,11 +20,59 @@ public:
   Vector<T, SIZE> solve();
   void showSolution() const;
   void countErrorVector();
-/* do pobierania danych prywatnych */
-  Matrix<T, SIZE> getMatrix() const{return matrix;};
-  Vector<T, SIZE> getVector() const{return vector;};
-  Vector<T, SIZE> getSolution() const{return solution;};
-  Vector<T, SIZE> getError() const{return error;};
+  /* do pobierania danych prywatnych */
+  Matrix<T, SIZE> getMatrix() const { return matrix; };
+  Vector<T, SIZE> getVector() const { return vector; };
+  Vector<T, SIZE> getSolution() const { return solution; };
+  Vector<T, SIZE> getError() const { return error; };
+
+  friend std::istream &operator>>(std::istream &stream,
+                                  SystemOfLinearEquations<T, SIZE> &system)
+  {
+    stream >> system.matrix;
+    stream >> system.vector;
+
+    return stream;
+  }
+  friend std::ostream &operator<<(std::ostream &stream,
+                                  SystemOfLinearEquations<T, SIZE> &system)
+  {
+    for (int i = 0; i < SIZE; i++)
+    {
+      std::cout << "|";
+      for (int j = 0; j < SIZE; j++)
+      {
+        std::cout << std::setw(4) << system.getMatrix()(i, j) << " ";
+      }
+      std::cout << "||x" << i + 1 << "|";
+      if (SIZE % 2 == 1)
+      {
+        if (i == SIZE / 2)
+        {
+          std::cout << " = "
+                    << "|" << std::setw(4) << system.getVector()[i] << " |";
+        }
+        else
+        {
+          std::cout << "   "
+                    << "|" << std::setw(4) << system.getVector()[i] << " |";
+        }
+      }
+      else if ((i == SIZE / 2) || (i == SIZE / 2 - 1))
+      {
+        std::cout << " - "
+                  << "|" << std::setw(4) << system.getVector()[i] << " |";
+      }
+      else
+      {
+        std::cout << "   "
+                  << "|" << std::setw(4) << system.getVector()[i] << " |";
+      }
+      std::cout << std::endl;
+    }
+
+    return stream;
+  }
 };
 
 ///////////////////////////////////////////////////////////////////
@@ -60,7 +108,6 @@ Vector<T, SIZE> SystemOfLinearEquations<T, SIZE>::solve()
   return this->solution;
 }
 
-
 /* Wyswietla rozwiazania ukladu rownan */
 template <typename T, int SIZE>
 void SystemOfLinearEquations<T, SIZE>::showSolution() const
@@ -71,14 +118,12 @@ void SystemOfLinearEquations<T, SIZE>::showSolution() const
   }
 }
 
-
 /* Realizuje obliczenie wektora bledu */
 template <typename T, int SIZE>
 void SystemOfLinearEquations<T, SIZE>::countErrorVector()
 {
   this->error = this->matrix * this->solution - this->vector;
 }
-
 
 ///////////////////////////////////////////////////////////////////
 ///////////* przeciazenia operatorow "strumieniowych" *////////////
@@ -93,70 +138,80 @@ void SystemOfLinearEquations<T, SIZE>::countErrorVector()
  *    na wejscie nalezy podac postac transponowana macierzy
  *    z wektorem wyrazow wolnych 
  */
-template <typename T, int SIZE>
-std::istream &operator>>(std::istream &stream,
-                         SystemOfLinearEquations<T, SIZE> &system)
-{
-  // Matrix<T, SIZE> m;
-  // Vector<T, SIZE> v;
+// template <typename T, int SIZE>
+// std::istream &operator>>(std::istream &stream,
+//                          SystemOfLinearEquations<T, SIZE> &system)
+// {
+//   Matrix<T, SIZE> m;
+//   Vector<T, SIZE> v;
 
-  stream >> system.getMatrix();
-  stream >> system.getVector();
+//   stream >> m;
+//   stream >> v;
 
-  return stream;
-}
+//   for (int i = 0; i < SIZE; i++)
+//   {
+//     system.getVector()[i] = v[i];
+//     for (int j = 0; j < SIZE; j++)
+//     {
+//       system.getMatrix()(i, j) = m(i, j);
+//     }
+//   }
 
-/* Realizuje wyswietlnie ukladu rownan na ekranie.
- * Argumenty:
- *    stream - output stream,
- *    system - uklad rownan.
- * Uwaga:
- *    -wyswietla macierz oryginalna, nie transponowana 
- *     jak ta podana na wejsiu,
- *    -zeby macierz zostala wyswietlona ladnie i prosto
- *     jej wyrazy powinny skladac sie z nie wiecej niz 4 znakow.
- *      
- * 
- * (kod dosc brzydki ale pierwszy raz bawie sie z formatowaniem
- * outputu, prosze o wyrozumialosc)
- */
-template <typename T, int SIZE>
-std::ostream &operator<<(std::ostream &stream,
-                         const SystemOfLinearEquations<T, SIZE> &system)
-{
-  for (int i = 0; i < SIZE; i++)
-  {
-    std::cout << "|";
-    for (int j = 0; j < SIZE; j++)
-    {
-      std::cout << std::setw(4) << system.getMatrix()(i, j) << " ";
-    }
-    std::cout << "||x" << i + 1 << "|";
-    if (SIZE % 2 == 1)
-    {
-      if (i == SIZE / 2)
-      {
-        std::cout << " = "
-                  << "|" << std::setw(4) << system.getVector()[i] << " |";
-      }
-      else
-      {
-        std::cout << "   "
-                  << "|" << std::setw(4) << system.getVector()[i] << " |";
-      }
-    }
-    else if ((i == SIZE / 2) || (i == SIZE / 2 - 1))
-    {
-      std::cout << " - "
-                << "|" << std::setw(4) << system.getVector()[i] << " |";
-    }
-    else
-    {
-      std::cout << "   "
-                << "|" << std::setw(4) << system.getVector()[i] << " |";
-    }
-    std::cout << std::endl;
-  }
+//   std::cout << m << v << std::endl;
+//   return stream;
+// }
 
-  return stream;
-}
+// /* Realizuje wyswietlnie ukladu rownan na ekranie.
+//  * Argumenty:
+//  *    stream - output stream,
+//  *    system - uklad rownan.
+//  * Uwaga:
+//  *    -wyswietla macierz oryginalna, nie transponowana 
+//  *     jak ta podana na wejsiu,
+//  *    -zeby macierz zostala wyswietlona ladnie i prosto
+//  *     jej wyrazy powinny skladac sie z nie wiecej niz 4 znakow.
+//  *      
+//  * 
+//  * (kod dosc brzydki ale pierwszy raz bawie sie z formatowaniem
+//  * outputu, prosze o wyrozumialosc)
+//  */
+// template <typename T, int SIZE>
+// std::ostream &operator<<(std::ostream &stream,
+//                          const SystemOfLinearEquations<T, SIZE> &system)
+// {
+//   for (int i = 0; i < SIZE; i++)
+//   {
+//     std::cout << "|";
+//     for (int j = 0; j < SIZE; j++)
+//     {
+//       std::cout << std::setw(4) << system.getMatrix()(i, j) << " ";
+//     }
+//     std::cout << "||x" << i + 1 << "|";
+//     if (SIZE % 2 == 1)
+//     {
+//       if (i == SIZE / 2)
+//       {
+//         std::cout << " = "
+//                   << "|" << std::setw(4) << system.getVector()[i] << " |";
+//       }
+//       else
+//       {
+//         std::cout << "   "
+//                   << "|" << std::setw(4) << system.getVector()[i] << " |";
+//       }
+//     }
+//     else if ((i == SIZE / 2) || (i == SIZE / 2 - 1))
+//     {
+//       std::cout << " - "
+//                 << "|" << std::setw(4) << system.getVector()[i] << " |";
+//     }
+//     else
+//     {
+//       std::cout << "   "
+//                 << "|" << std::setw(4) << system.getVector()[i] << " |";
+//     }
+//     std::cout << std::endl;
+//   }
+
+//   return stream;
+// }

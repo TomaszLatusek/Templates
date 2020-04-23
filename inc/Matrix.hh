@@ -2,8 +2,8 @@
 
 #include <iostream>
 #include "Vector.hh"
-
-
+#include <cmath>
+#define ERR 0.000000001
 ///////////////////////////////////////////////////////////////////
 ///////////////* Szablon klasy dla macierzy *//////////////////////
 ///////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@ public:
   /* do wyciagania kolumn macierzy */
   Vector<T, SIZE> &operator[](int index);
   /* obliczanie wyznacznika macierzy */
-  double determinant() const;
+  T determinant() const;
   /* mnozenie macierzy przez wektor */
   Vector<T, SIZE> operator*(Vector<T, SIZE> vec) const;
   /* Hadamard */
@@ -80,25 +80,26 @@ Vector<T, SIZE> &Matrix<T, SIZE>::operator[](int index)
  *    w domysle macierz
  * Zwraca:
  *    wyznacznik macierzy
- */
+ */using std::abs;
 template <typename T, int SIZE>
-double Matrix<T, SIZE>::determinant() const
+T Matrix<T, SIZE>::determinant() const
 {
   Matrix<T, SIZE> copy = *this;
 
   T temp1, temp2; //pomocnicze
-  T det = 1;      //wyznacznik
+  int verseSwitch = 1; //zmiana znaku wyznacznika
+  T det;      //wyznacznik
   int i, j;
 
   /* Zamiana wierszy w przypadku,
      * gdy pierwszy element jest zerem */
-  if (copy(0, 0) == 0)
+  if (abs(copy(0, 0)) < ERR)
   {
     for (i = 0; i < SIZE; i++)
     {
-      if (copy(i, 0) != 0)
+      if (abs(copy(i, 0)) > 0)
       {
-        det *= -1;
+        verseSwitch *= -1;
         for (j = 0; j < SIZE; j++)
         {
           temp1 = copy(i, j);
@@ -120,11 +121,17 @@ double Matrix<T, SIZE>::determinant() const
       }
     }
   }
-
   /* Obliczzenie wyznacznika */
-  for (i = j = 0; i < SIZE && j < SIZE; i++, j++)
+  i=j=0;
+  det = copy(i,j);
+  for (i = j = 1; i < SIZE && j < SIZE; i++, j++)
   {
     det *= copy(i, j);
+  }
+
+  if(!verseSwitch)
+  {
+    det *= -1;
   }
 
   return det;
