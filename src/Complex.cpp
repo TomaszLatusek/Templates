@@ -231,22 +231,47 @@ void ShowAlert(istream &is, int i)
     if (i < 3)
     {
         cout << endl
-             << "[!] Blad zapisu liczby zespolonej." << endl;
-        cout << "    Sprobuj jeszcze raz: ";
+             << "[!] Complex number error." << endl;
+        cout << "    Try again: ";
     }
 }
 
+/*!
+ * Realizuje liczenie modulu liczby zespolonej.
+ * Argumenty:
+ *    arg - liczba zespolona
+ * Zwraca:
+ *    modul arg
+ */
 double abs(Complex arg)
 {
     return sqrt(arg.re*arg.re + arg.im*arg.im);
 }
 
+/*!
+ * Realizuje pomnozenie liczby zespolonej przez 
+ * inna liczbe zespolona
+ * Argumenty:
+ *    arg1 - liczba, ktora powiekszamy,
+ *    arg2 - liczba, przez ktora mnozymy.
+ * Zwraca:
+ *    powiekszona liczba arg1.
+ */
 Complex operator*=(Complex &arg1, Complex arg2)
 {   
     arg1 = arg1 * arg2;
     return arg1;
 }
 
+/*!
+ * Realizuje pomnozenie liczby zespolonej przez 
+ * doubla
+ * Argumenty:
+ *    arg1 - liczba, ktora powiekszamy,
+ *    arg2 - liczba, przez ktora mnozymy.
+ * Zwraca:
+ *    powiekszona liczba arg1.
+ */
 Complex operator*=(Complex &arg1, double arg2)
 {
     arg1.re *= arg2;

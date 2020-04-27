@@ -4,6 +4,7 @@
 #include "Vector.hh"
 #include <cmath>
 #define ERR 0.000000001
+
 ///////////////////////////////////////////////////////////////////
 ///////////////* Szablon klasy dla macierzy *//////////////////////
 ///////////////////////////////////////////////////////////////////
@@ -97,7 +98,7 @@ T Matrix<T, SIZE>::determinant() const
   {
     for (i = 0; i < SIZE; i++)
     {
-      if (abs(copy(i, 0)) > 0)
+      if (abs(copy(i, 0)) > ERR)
       {
         verseSwitch *= -1;
         for (j = 0; j < SIZE; j++)
@@ -122,8 +123,8 @@ T Matrix<T, SIZE>::determinant() const
     }
   }
   /* Obliczzenie wyznacznika */
-  i=j=0;
-  det = copy(i,j);
+  det = copy(0,0);
+
   for (i = j = 1; i < SIZE && j < SIZE; i++, j++)
   {
     det *= copy(i, j);
