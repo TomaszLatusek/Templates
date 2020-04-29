@@ -85,15 +85,16 @@ Vector<T, SIZE> Vector<T, SIZE>::operator+(Vector<T, SIZE> vec2) const
  * Zwraca:
  *    result - roznica argumentow.
  */
-template <typename T, int SIZE>
+template <typename T, int SIZE> 
 Vector<T, SIZE> Vector<T, SIZE>::operator-(Vector<T, SIZE> vec2) const
 {
   for (int i = 0; i < SIZE; i++)
   {
     vec2[i] -= coordinates[i];
+    vec2[i] *= -1;
   }
 
-  return vec2 * -1;
+  return vec2;
 }
 
 

@@ -22,11 +22,7 @@ public:
   Vector<T, SIZE> solve();
   void showSolution() const;
   void countErrorVector();
-  /* do pobierania danych prywatnych */
-  Matrix<T, SIZE> getMatrix() const { return matrix; };
-  Vector<T, SIZE> getVector() const { return vector; };
-  Vector<T, SIZE> getSolution() const { return solution; };
-  Vector<T, SIZE> getError() const { return error; };
+  void showErrorVector() const;
 
   friend std::istream &operator>>(std::istream &stream,
                                   SystemOfLinearEquations<T, SIZE> &system)
@@ -44,7 +40,7 @@ public:
       std::cout << "|";
       for (int j = 0; j < SIZE; j++)
       {
-        std::cout << std::setw(4) << system.getMatrix()(i, j) << " ";
+        std::cout << std::setw(4) << system.matrix(i, j) << " ";
       }
       std::cout << "||x" << i + 1 << "|";
       if (SIZE % 2 == 1)
@@ -52,23 +48,23 @@ public:
         if (i == SIZE / 2)
         {
           std::cout << " = "
-                    << "|" << std::setw(4) << system.getVector()[i] << " |";
+                    << "|" << std::setw(4) << system.vector[i] << " |";
         }
         else
         {
           std::cout << "   "
-                    << "|" << std::setw(4) << system.getVector()[i] << " |";
+                    << "|" << std::setw(4) << system.vector[i] << " |";
         }
       }
       else if ((i == SIZE / 2) || (i == SIZE / 2 - 1))
       {
         std::cout << " - "
-                  << "|" << std::setw(4) << system.getVector()[i] << " |";
+                  << "|" << std::setw(4) << system.vector[i] << " |";
       }
       else
       {
         std::cout << "   "
-                  << "|" << std::setw(4) << system.getVector()[i] << " |";
+                  << "|" << std::setw(4) << system.vector[i] << " |";
       }
       std::cout << std::endl;
     }
@@ -117,7 +113,8 @@ void SystemOfLinearEquations<T, SIZE>::showSolution() const
 {
   for (int i = 0; i < SIZE; i++)
   {
-    std::cout << "x" << i + 1 << " = " << this->solution[i] << std::endl;
+    std::cout << "x" << i + 1 << " = " << std::fixed << 
+    std::setprecision(2) << this->solution[i] << std::endl;
   }
 }
 
@@ -128,3 +125,10 @@ void SystemOfLinearEquations<T, SIZE>::countErrorVector()
   this->error = this->matrix * this->solution - this->vector;
 }
 
+/* Realizuje wyswietlenie wektora bledu */
+template <typename T, int SIZE>
+void SystemOfLinearEquations<T, SIZE>::showErrorVector() const 
+{
+  std::cout << std::scientific << std::setprecision(1) << 
+  this->error << std::endl;
+}

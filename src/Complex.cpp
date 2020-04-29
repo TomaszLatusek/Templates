@@ -279,3 +279,8 @@ Complex operator*=(Complex &arg1, double arg2)
 
     return arg1;
 }
+
+Complex operator*(Complex arg1, double arg2)
+{
+    return arg1 *= arg2;
+}

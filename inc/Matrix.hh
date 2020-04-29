@@ -154,7 +154,8 @@ Vector<T, SIZE> Matrix<T, SIZE>::operator*(Vector<T, SIZE> vec) const
 
   for (int i = 0; i < SIZE; i++)
   {
-    result[i] = 0;
+    /* wyzerowanie */
+    result[i] = this->operator()(i, i) - this->operator()(i, i);
     for (int j = 0; j < SIZE; j++)
     {
       result[i] += this->operator()(i, j) * vec[j];
