@@ -30,12 +30,37 @@ int main()
         s2.showSolution();
         s2.countErrorVector();
         s2.showErrorVector();
-        return 0;        
+        return 0;
     default: /* brak 'r' lub 'z' na poczatku */
         std::cout << "[!] No such option: " << type << std::endl;
         return 1;
         break;
     }
 
-    return 0;    
+    /*********************************************************
+     *************** Modyfikacja na zajeciach ****************
+     *********************************************************/
+     /* nalezy odkomentowac */
+     
+    // double error = 0.000001;
+    // Complex c;
+    // Matrix<double, 2> m;
+
+    // std::cin >> c;
+    // double magnitude = abs(c) * abs(c);
+
+    // m(0, 0) = m(1, 1) = c.re;
+    // m(0, 1) = -c.im;
+    // m(1, 0) = c.im;
+
+    // if (std::abs(magnitude - m.determinant()) < error)
+    // {
+    //     std::cout << "magnitude = determinant = " << magnitude << std::endl;
+    // }
+    // else
+    // {
+    //     std::cout << "Zonk:/" << std::endl;
+    // }
+
+    return 0;
 }
